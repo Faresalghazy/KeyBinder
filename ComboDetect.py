@@ -5,44 +5,53 @@
 import time
 import pyxhook
 
-combo = []
 
-s = ""
+class ComboDetector(object):
+    combo = []
+    comKey = ""
+    running = True
 
-def pres(event):
-    # appending the ScnCodes of pressed Keys to the combo list
-    combo.append(event.ScanCode)
-    global s
-    if s != "":
-        s += "+"
-    s += event.Key
+    def pres(self, event):
+        # appending the ScnCodes of pressed Keys to the combo list
+        self.combo.append(event.ScanCode)
+        if self.comKey != "":
+            self.comKey += "+"
+        self.comKey += event.Key
 
+    def rel(self, event):
+        self.running = False
 
-def rel(event):
-    global running
-    running = False
+    def __init__(self, combos=[], keys=""):
+        self.combo = combos
+        self.comKey = keys
+        # Create hookmanager
+        hookman = pyxhook.HookManager()
 
+        # Define our callback to fire when a key is pressed down or released
+        hookman.KeyDown = self.pres
 
-# Create hookmanager
-hookman = pyxhook.HookManager()
+        hookman.KeyUp = self.rel
 
-# Define our callback to fire when a key is pressed down or released
-hookman.KeyDown = pres
+        # Hook the keyboard
+        hookman.HookKeyboard()
 
-hookman.KeyUp = rel
+        # Start our listener
+        hookman.start()
 
-# Hook the keyboard
-hookman.HookKeyboard()
+        # Create a loop to keep the application running
+        while self.running:
+            time.sleep(0.05)  # make the delay shorter in case you encounter duplications
 
-# Start our listener
-hookman.start()
+        # Close the listener when we are done
+        hookman.cancel()
 
-# Create a loop to keep the application running
-running = True
-while running:
-    time.sleep(0.05)#make the delay shorter in case you encounter duplications
+    def getpressedkeys(self):
+        return self.combo
 
-# Close the listener when we are done
-hookman.cancel()
-print(combo)
-print(s)
+    @staticmethod
+    def getkeys(self):
+        return self.comKey
+
+r = ComboDetector()
+print (r.getpressedkeys())
+print (r.getkeys(r))
