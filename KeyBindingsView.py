@@ -3,12 +3,20 @@
 # Since this program is meant to release bash code, it is obviously non-system agnostic and only works linux systems that use BASH
 # This is one file which only creates the GUI, another file is needed to use the info taken by this program
 
+FileName  = 'BinderData.txt'
 import tkinter as tk
+from ComboDetect import ComboDetector
+
+# Create a class to get pressed keys and print them
+KeyManager = ComboDetector()
 
 
 # Class that creates GUI and takes info to save in file
 
 class MainFrame(tk.Tk):
+    # variable to store pressed keys
+    KeyCombination = ""
+
     # function to write to file
     def SaveFunction(self, e1, e2, FileName):
         file = open(FileName, "a")
@@ -17,6 +25,14 @@ class MainFrame(tk.Tk):
         file.write(combo)
         file.write(performed)
         file.close()
+
+    def KeysPressed(self, Entry, KeyCombination):
+        Entry.config(state="normal")
+        Entry.insert(tk.END, "Test")
+        print("test")
+        KeyCombination = KeyManager.getpressedkeys()
+        Entry.delete(0, tk.END)
+        Entry.insert(tk.END, KeyCombination)
 
     # constructor
 
@@ -28,6 +44,10 @@ class MainFrame(tk.Tk):
         #  create labels and text boxes
         KeyComboLabel = tk.Label(root, text="Key combination = ")
         KeyComboEntry = tk.Entry(root)
+
+        # Bind function to entry
+
+        KeyComboEntry.bind('<FocusIn>', lambda e: self.KeysPressed(KeyComboEntry, self.KeyCombination))
 
         ActionLabel = tk.Label(root, text="Command to be executed = ")
         ActionEntry = tk.Entry(root)
@@ -43,5 +63,5 @@ class MainFrame(tk.Tk):
         SaveButton.grid(row=2, column=2, sticky=tk.E)
 
 
-app = MainFrame()
+app = MainFrame(FileName)
 app.mainloop()

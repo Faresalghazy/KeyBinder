@@ -51,7 +51,7 @@ class ComboDetector(object):
     @staticmethod
     def getkeys(self):
         return self.comKey
-
-r = ComboDetector()
-print (r.getpressedkeys())
-print (r.getkeys(r))
+# Comented out by fares
+# r = ComboDetector()
+# print(r.getpressedkeys())
+# print(r.getkeys(r))
