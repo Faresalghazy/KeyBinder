@@ -4,6 +4,7 @@
 # This is one file which only creates the GUI, another file is needed to use the info taken by this program
 
 FileName  = 'BinderData.txt'
+
 import tkinter as tk
 from ComboDetect import ComboDetector
 
@@ -16,7 +17,7 @@ KeyManager = ComboDetector()
 class MainFrame(tk.Tk):
     # variable to store pressed keys
     KeyCombination = ""
-
+    testcounter = 1
     # function to write to file
     def SaveFunction(self, e1, e2, FileName):
         file = open(FileName, "a")
@@ -29,8 +30,9 @@ class MainFrame(tk.Tk):
     def KeysPressed(self, Entry, KeyCombination):
         Entry.config(state="normal")
         Entry.insert(tk.END, "Test")
-        print("test")
-        KeyCombination = KeyManager.getpressedkeys()
+        print("test "+str(self.testcounter))
+        self.testcounter = self.testcounter + 1
+        KeyCombination = str (KeyManager.getpressedkeys())
         Entry.delete(0, tk.END)
         Entry.insert(tk.END, KeyCombination)
 

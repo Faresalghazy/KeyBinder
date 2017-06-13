@@ -46,12 +46,13 @@ class ComboDetector(object):
         hookman.cancel()
 
     def getpressedkeys(self):
+        print("got keys = " + str(self.combo))
         return self.combo
 
     @staticmethod
     def getkeys(self):
         return self.comKey
-# Comented out by fares
-# r = ComboDetector()
-# print(r.getpressedkeys())
-# print(r.getkeys(r))
+
+#r = ComboDetector()
+#print(r.getpressedkeys())
+#print(r.getkeys(r))
