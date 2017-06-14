@@ -7,7 +7,7 @@ FileName  = 'BinderData.txt'
 
 import tkinter as tk
 from ComboDetect import ComboDetector
-
+from _thread import start_new_thread
 # Create a class to get pressed keys and print them
 KeyManager = ComboDetector()
 
@@ -18,6 +18,11 @@ class MainFrame(tk.Tk):
     # variable to store pressed keys
     KeyCombination = ""
     testcounter = 1
+    Flag = True
+    #function to toggle Flag
+    def Toggle(self):
+        print("toggle")
+        self.Flag = not self.Flag
     # function to write to file
     def SaveFunction(self, e1, e2, FileName):
         file = open(FileName, "a")
@@ -29,12 +34,14 @@ class MainFrame(tk.Tk):
 
     def KeysPressed(self, Entry, KeyCombination):
         Entry.config(state="normal")
-        Entry.insert(tk.END, "Test")
-        print("test "+str(self.testcounter))
-        self.testcounter = self.testcounter + 1
-        KeyCombination = str (KeyManager.getpressedkeys())
-        Entry.delete(0, tk.END)
-        Entry.insert(tk.END, KeyCombination)
+       #Entry.insert(tk.END, "Test")
+        while self.Flag:
+            print("test "+str(self.testcounter))
+            self.testcounter = self.testcounter + 1
+            KeyCombination = str(KeyManager.getpressedkeys())
+            Entry.delete(0, tk.END)
+            Entry.insert(tk.END, KeyCombination)
+
 
     # constructor
 
@@ -49,8 +56,8 @@ class MainFrame(tk.Tk):
 
         # Bind function to entry
 
-        KeyComboEntry.bind('<FocusIn>', lambda e: self.KeysPressed(KeyComboEntry, self.KeyCombination))
-
+        KeyComboEntry.bind('<FocusIn>', lambda e: start_new_thread(self.KeysPressed, (KeyComboEntry, self.KeyCombination)))
+        KeyComboEntry.bind('<FocusOut>', lambda f: self.toggle, ())
         ActionLabel = tk.Label(root, text="Command to be executed = ")
         ActionEntry = tk.Entry(root)
         # place widgets in positions
