@@ -8,6 +8,7 @@ FileName  = 'BinderData.txt'
 import tkinter as tk
 from ComboDetect import ComboDetector
 from _thread import start_new_thread
+import time
 # Create a class to get pressed keys and print them
 KeyManager = ComboDetector()
 
@@ -21,7 +22,7 @@ class MainFrame(tk.Tk):
     Flag = True
     #function to toggle Flag
     def Toggle(self):
-        print("toggle")
+        print("toggle1")
         self.Flag = not self.Flag
     # function to write to file
     def SaveFunction(self, e1, e2, FileName):
@@ -33,12 +34,14 @@ class MainFrame(tk.Tk):
         file.close()
 
     def KeysPressed(self, Entry, KeyCombination):
+        self.Flag = True 
         Entry.config(state="normal")
        #Entry.insert(tk.END, "Test")
         while self.Flag:
             print("test "+str(self.testcounter))
             self.testcounter = self.testcounter + 1
             KeyCombination = str(KeyManager.getpressedkeys())
+            time.sleep(50)
             Entry.delete(0, tk.END)
             Entry.insert(tk.END, KeyCombination)
 
@@ -57,7 +60,7 @@ class MainFrame(tk.Tk):
         # Bind function to entry
 
         KeyComboEntry.bind('<FocusIn>', lambda e: start_new_thread(self.KeysPressed, (KeyComboEntry, self.KeyCombination)))
-        KeyComboEntry.bind('<FocusOut>', lambda f: self.toggle, ())
+        KeyComboEntry.bind('<FocusOut>', lambda f: self.Toggle())
         ActionLabel = tk.Label(root, text="Command to be executed = ")
         ActionEntry = tk.Entry(root)
         # place widgets in positions
