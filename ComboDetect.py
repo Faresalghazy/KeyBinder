@@ -22,6 +22,7 @@ class ComboDetector(object):
         self.running = False
 
     def __init__(self, combos=[], keys=""):
+        time.sleep(0.05)
         self.combo = combos
         self.comKey = keys
         # Create hookmanager
