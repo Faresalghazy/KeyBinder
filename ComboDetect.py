@@ -18,12 +18,21 @@ class ComboDetector(object):
             self.comKey += "+"
         self.comKey += event.Key
 
-    def rel(self, event):
+    def rel(self, event):	
         self.running = False
 
     def __init__(self, combos=[], keys=""):
+        time.sleep(0.1)
         self.combo = combos
         self.comKey = keys
+       
+
+    def getpressedkeys(self):
+        self.running = True
+        self.combo = []
+        self.dcomKey = ""
+        time.sleep(0.15)
+
         # Create hookmanager
         hookman = pyxhook.HookManager()
 
@@ -40,12 +49,10 @@ class ComboDetector(object):
 
         # Create a loop to keep the application running
         while self.running:
-            time.sleep(0.05)  # make the delay shorter in case you encounter duplications
+            time.sleep(0.09)  # make the delay longer in case you encounter duplications
 
         # Close the listener when we are done
         hookman.cancel()
-
-    def getpressedkeys(self):
         print("got keys = " + str(self.combo))
         return self.combo
 
