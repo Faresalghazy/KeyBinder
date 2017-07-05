@@ -34,14 +34,14 @@ class MainFrame(tk.Tk):
         file.close()
 
     def KeysPressed(self, Entry, KeyCombination):
-        self.Flag = True 
+        self.Flag = True
         Entry.config(state="normal")
        #Entry.insert(tk.END, "Test")
         while self.Flag:
             print("test "+str(self.testcounter))
             self.testcounter = self.testcounter + 1
             KeyCombination = str(KeyManager.getpressedkeys())
-            time.sleep(50)
+            time.sleep(0.5)# changed from 50 to 0.50 #LadonAl (Alaa)
             Entry.delete(0, tk.END)
             Entry.insert(tk.END, KeyCombination)
 
@@ -58,6 +58,9 @@ class MainFrame(tk.Tk):
         KeyComboEntry = tk.Entry(root)
 
         # Bind function to entry
+
+
+
 
         KeyComboEntry.bind('<FocusIn>', lambda e: start_new_thread(self.KeysPressed, (KeyComboEntry, self.KeyCombination)))
         KeyComboEntry.bind('<FocusOut>', lambda f: self.Toggle())
