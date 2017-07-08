@@ -1,11 +1,14 @@
 import subprocess
 class Model:
-    #constructor, which only creates the dictionary
-    def __init__(self,Filename):
-        #create dictionary from passed text file
+    # constructor, which only creates the dictionary
+    def __init__(self, Filename):
+        # create dictionary from passed text file
         self.LoadDict(Filename)
-    #function to load dictionary from txt file
+
+    # function to load dictionary from txt file
+
     def LoadDict(FileName):
+
         # need to read in this format : keycombination, command
         DataFile = open(FileName, 'r')
         # create dictionary : key= keycombo, value = dobash
@@ -31,10 +34,11 @@ class Model:
         return KeyDictionary
 
     # function to perform bash script
-    def DoBash(SomeText):
+    def DoBash(self,SomeText):
         subprocess.call(SomeText,
                         shell=True)  # shell = true is necessary, sometext is the bash command (may also be a .sh file)
 
     # function to perform an action from a key in a dictionary
     def ExecuteFromDic(self,dictionary, key):
-        self.DoBash(dictionary[key])  # perform the bash script of the command returned from the dictionary
+        # perform the bash script of the command returned from the dictionary
+        self.DoBash(dictionary[key])

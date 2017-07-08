@@ -3,12 +3,27 @@
 # Since this program is meant to release bash code, it is obviously non-system agnostic and only works linux systems that use BASH
 # This is one file which only creates the GUI, another file is needed to use the info taken by this program
 
+FileName  = 'BinderData.txt'
+
 import tkinter as tk
+from ComboDetect import ComboDetector
+from _thread import start_new_thread
+import time
+# Create a class to get pressed keys and print them
+KeyManager = ComboDetector()
 
 
 # Class that creates GUI and takes info to save in file
 
 class MainFrame(tk.Tk):
+    # variable to store pressed keys
+    KeyCombination = ""
+    testcounter = 1
+    Flag = True
+    #function to toggle Flag
+    def Toggle(self):
+        print("toggle1")
+        self.Flag = not self.Flag
     # function to write to file
     def SaveFunction(self, e1, e2, FileName):
         file = open(FileName, "a")
@@ -17,6 +32,19 @@ class MainFrame(tk.Tk):
         file.write(combo)
         file.write(performed)
         file.close()
+
+    def KeysPressed(self, Entry, KeyCombination):
+        self.Flag = True
+        Entry.config(state="normal")
+       #Entry.insert(tk.END, "Test")
+        while self.Flag:
+            print("test "+str(self.testcounter))
+            self.testcounter = self.testcounter + 1
+            KeyCombination = str(KeyManager.getpressedkeys())
+            time.sleep(0.5)# changed from 50 to 0.50 #LadonAl (Alaa)
+            Entry.delete(0, tk.END)
+            Entry.insert(tk.END, KeyCombination)
+
 
     # constructor
 
@@ -29,6 +57,13 @@ class MainFrame(tk.Tk):
         KeyComboLabel = tk.Label(root, text="Key combination = ")
         KeyComboEntry = tk.Entry(root)
 
+        # Bind function to entry
+
+
+
+
+        KeyComboEntry.bind('<FocusIn>', lambda e: start_new_thread(self.KeysPressed, (KeyComboEntry, self.KeyCombination)))
+        KeyComboEntry.bind('<FocusOut>', lambda f: self.Toggle())
         ActionLabel = tk.Label(root, text="Command to be executed = ")
         ActionEntry = tk.Entry(root)
         # place widgets in positions
@@ -43,5 +78,5 @@ class MainFrame(tk.Tk):
         SaveButton.grid(row=2, column=2, sticky=tk.E)
 
 
-app = MainFrame()
+app = MainFrame(FileName)
 app.mainloop()
